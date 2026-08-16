@@ -1,0 +1,26 @@
+# Virtual environments — contain platform-specific binaries (x86 torch 2.2.2 vs
+# arm64 torch 2.13). Never share these between the Intel iMac and the M4.
+.venv/
+.venv-mcp/
+venv/
+
+# Recordings and transcripts produced by transcribe.py
+recording_*.wav
+recording_*.txt
+recording_*.live.txt
+
+# Transcripts saved under your own names. These contain whatever was said in the
+# room — treat them as personal data and keep them out of the repo entirely; this
+# rule only stops an accidental `git add .`.
+*transcription.txt
+*interview*.txt
+*.m4a
+*.mp3
+*.aiff
+
+# Test fixtures generated on demand by `say`
+tests/fixtures/
+
+__pycache__/
+*.py[cod]
+.DS_Store
