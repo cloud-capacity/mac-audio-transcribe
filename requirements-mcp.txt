@@ -1,0 +1,25 @@
+# Requirements for the MCP server venv (Python 3.12).
+#
+# 3.12 is the only version both machines can run: the MCP SDK needs >=3.10, and
+# torch's last x86 macOS build (2.2.2) has wheels only up to cp312. On Apple
+# Silicon the same file resolves to a current torch instead.
+
+mcp>=2.0.0
+sounddevice>=0.4.6
+openai-whisper>=20231117
+
+# torch is deliberately unpinned — pip picks the right wheel per machine
+# (x86 macOS caps torch at 2.2.2; arm64 gets 2.13+).
+#
+# numpy needs a cap on Intel macOS only: torch 2.2.2 was compiled against NumPy
+# 1.x, and under NumPy 2.x every torch.from_numpy call raises "Numpy is not
+# available" — which breaks Whisper entirely. Current torch on arm64 is fine
+# with NumPy 2, so the marker keeps that machine on the latest.
+numpy<2; platform_system == "Darwin" and platform_machine == "x86_64"
+
+# numba and llvmlite need a cap on Intel macOS only: releases after these are
+# published as arm64-only wheels, so pip falls back to an sdist and building
+# llvmlite from source requires a full LLVM toolchain. The markers make these
+# lines a no-op on Apple Silicon, where the latest versions install fine.
+llvmlite<=0.45.1; platform_system == "Darwin" and platform_machine == "x86_64"
+numba<=0.62.1; platform_system == "Darwin" and platform_machine == "x86_64"
